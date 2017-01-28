@@ -16,28 +16,28 @@ amount_of_comics=$latest_comic_id
 
 # API
 printf "API\n"
-validate "$amount_of_comics comics in api/comics/" $(curl -X GET "http://consolia-comic.com:8080/api/comic/" -s | sed 's/,/\n/g' | grep '"id"' | wc -l) $amount_of_comics
-validate "200 OK api/comic/" $(curl -X GET "http://consolia-comic.com:8080/api/comic/" -si | grep HTTP | awk '{print $2}') 200
-validate "latest comic in api" $(curl -X GET "http://consolia-comic.com:8080/api/comic/$latest_comic_id" -si | grep HTTP | awk '{print $2}') 200
-validate "301 on api/comic" $(curl -X GET "http://consolia-comic.com:8080/api/comic" -si | grep HTTP | awk '{print $2}') 301
-validate "404 on api/comic/cake" $(curl -X GET "http://consolia-comic.com:8080/api/comic/cake" -si | grep HTTP | awk '{print $2}') 404
-validate "api returns content type json" $(curl -X GET "http://consolia-comic.com:8080/api/comic/" -si | grep "Content-Type" | grep "application/json" | wc -l) 1
+validate "$amount_of_comics comics in api/comics/" $(curl -X GET "http://consolia-comic.com/api/comic/" -s | sed 's/,/\n/g' | grep '"id"' | wc -l) $amount_of_comics
+validate "200 OK api/comic/" $(curl -X GET "http://consolia-comic.com/api/comic/" -si | grep HTTP | awk '{print $2}') 200
+validate "latest comic in api" $(curl -X GET "http://consolia-comic.com/api/comic/$latest_comic_id" -si | grep HTTP | awk '{print $2}') 200
+validate "301 on api/comic" $(curl -X GET "http://consolia-comic.com/api/comic" -si | grep HTTP | awk '{print $2}') 301
+validate "404 on api/comic/cake" $(curl -X GET "http://consolia-comic.com/api/comic/cake" -si | grep HTTP | awk '{print $2}') 404
+validate "api returns content type json" $(curl -X GET "http://consolia-comic.com/api/comic/" -si | grep "Content-Type" | grep "application/json" | wc -l) 1
 
 # Website
 printf "\nWebsite\n"
-validate "id=comic in /" $(curl -X GET "http://consolia-comic.com:8080/" -s | grep 'id="comic"' | wc -l) 1
-validate "comic img in /" $(curl -X GET "http://consolia-comic.com:8080/" -s | sed 's/"/\n/g' | grep "static.consolia-comic.com" | grep "/comics/" | wc -l) 3
-validate "comic img returns 200" $(curl -sI $(curl -X GET "http://consolia-comic.com:8080/" -s | sed 's/"/\n/g' | grep "static.consolia-comic.com" | grep "/comics/") | grep HTTP | awk '{print $2}') 200
-validate "200 OK /archive" $(curl -X GET "http://consolia-comic.com:8080/archive" -si | grep HTTP | awk '{print $2}') 200
-validate "200 OK /about" $(curl -X GET "http://consolia-comic.com:8080/about" -si | grep HTTP | awk '{print $2}') 200
-validate "404 /cake" $(curl -X GET "http://consolia-comic.com:8080/cake" -si | grep HTTP | awk '{print $2}') 404
-validate "303 /random" $(curl -X GET "http://consolia-comic.com:8080/random" -si | grep HTTP | awk '{print $2}') 303
-validate "latest comic in /" $(curl -X GET "http://consolia-comic.com:8080" -si | grep "#$latest_comic_id" | wc -l) 1
+validate "id=comic in /" $(curl -X GET "http://consolia-comic.com/" -s | grep 'id="comic"' | wc -l) 1
+validate "comic img in /" $(curl -X GET "http://consolia-comic.com/" -s | sed 's/"/\n/g' | grep "static.consolia-comic.com" | grep "/comics/" | wc -l) 3
+validate "comic img returns 200" $(curl -sI $(curl -X GET "http://consolia-comic.com/" -s | sed 's/"/\n/g' | grep "static.consolia-comic.com" | grep "/comics/") | grep HTTP | awk '{print $2}') 200
+validate "200 OK /archive" $(curl -X GET "http://consolia-comic.com/archive" -si | grep HTTP | awk '{print $2}') 200
+validate "200 OK /about" $(curl -X GET "http://consolia-comic.com/about" -si | grep HTTP | awk '{print $2}') 200
+validate "404 /cake" $(curl -X GET "http://consolia-comic.com/cake" -si | grep HTTP | awk '{print $2}') 404
+validate "303 /random" $(curl -X GET "http://consolia-comic.com/random" -si | grep HTTP | awk '{print $2}') 303
+validate "latest comic in /" $(curl -X GET "http://consolia-comic.com" -si | grep "#$latest_comic_id" | wc -l) 1
 
 # RSS
 printf "\nRSS\n"
-validate "200 OK /rss.xml" $(curl -X GET "http://consolia-comic.com:8080/rss.xml" -si | grep HTTP | awk '{print $2}') 200
-validate "rss.xml begins w/ xml" $(curl -X GET "http://consolia-comic.com:8080/rss.xml" -s | grep '^<?xml version="1.0" encoding="utf-8"?>' | wc -l) 1
+validate "200 OK /rss.xml" $(curl -X GET "http://consolia-comic.com/rss.xml" -si | grep HTTP | awk '{print $2}') 200
+validate "rss.xml begins w/ xml" $(curl -X GET "http://consolia-comic.com/rss.xml" -s | grep '^<?xml version="1.0" encoding="utf-8"?>' | wc -l) 1
 
 # Varnish
 printf "\nVarnish\n"
